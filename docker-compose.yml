@@ -1,0 +1,19 @@
+services:
+
+  db:
+    # Swapped the official postgres image for the official pgvector image
+    image: ankane/pgvector:latest
+    restart: always
+    container_name: ecdkip_postgres
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: ecdkip_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ecdkip_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  ecdkip_postgres_data:

@@ -3,5 +3,10 @@ name = "ecdkip-platform"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
+    "alembic>=1.20.0",
+    "asyncpg>=0.31.0",
     "fastapi[standard]>=0.142.2",
+    "pgvector>=0.5.0",
+    "pydantic-settings>=2.15.0",
+    "sqlalchemy>=2.1.1",
 ]
