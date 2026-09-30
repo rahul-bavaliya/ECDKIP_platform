@@ -3,10 +3,19 @@ import time
 import structlog
 from asgi_correlation_id import CorrelationIdMiddleware
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.exc import SQLAlchemyError
 
 from app.api.v1.router import router as api_v1_router
 from app.core import get_logger, setup_logging
+from app.core.exceptions import (
+    AppException,
+    app_exception_handler,
+    generic_exception_handler,
+    sqlalchemy_exception_handler,
+    validation_exception_handler,
+)
 
 # Initialize enterprise structured logs (True = JSON, False = Color Dev Console)
 setup_logging(is_production=False)
@@ -37,7 +46,7 @@ app.add_middleware(
 app.include_router(api_v1_router, prefix="/api/v1")
 
 
-@app.middleware("https")
+@app.middleware("http")
 async def log_requests_middleware(request: Request, call_next):
     """Global request lifecycle interceptor providing execution telemetry."""
     structlog.contextvars.clear_contextvars()
@@ -67,3 +76,13 @@ async def log_requests_middleware(request: Request, call_next):
             duration_ms=f"{process_time:.2f}",
         )
         raise e
+
+
+"""Adding the Exception Handling"""
+
+
+# Register Global Exception Handlers
+app.add_exception_handler(AppException, app_exception_handler)
+app.add_exception_handler(RequestValidationError, validation_exception_handler)
+app.add_exception_handler(SQLAlchemyError, sqlalchemy_exception_handler)
+app.add_exception_handler(Exception, generic_exception_handler)

@@ -8,9 +8,7 @@ from app.api.v1.endpoints.tenants import router as tenants_router
 
 # 💡 Direct file imports since subdirectories don't contain __init__.py files
 # Ensure these files exist as: app/api/v1/tenants.py and app/api/v1/users.py
-from app.api.v1.endpoints.users import router as users_router
 from app.core import get_logger
-from app.core.config import settings  # Import configuration toggles
 from app.core.database import get_db
 
 router = APIRouter()
@@ -20,10 +18,9 @@ logger = get_logger()
 # Dynamic Route Matrix Loading / Unloading Block
 # ==============================================================================
 
-logger.info("Loading Module Pipeline: Tenant Endpoints Enabled")
+""" Start Loading Module Pipeline: Tenant Endpoints Enabled"""
 router.include_router(tenants_router, prefix="/tenants", tags=["Tenants"])
-router.include_router(users_router, prefix="/users", tags=["Users"])
-
+""" End Loading Module Pipeline"""
 # ==============================================================================
 # Core System Base Endpoints
 # ==============================================================================
@@ -32,13 +29,14 @@ router.include_router(users_router, prefix="/users", tags=["Users"])
 @router.get("/", tags=["Root"])
 async def root():
     """Root entry point displaying API gateway index metadata."""
+    ResponseEnvelope()
     return {
         "message": "Welcome to the Enterprise Cloud Document & Knowledge Intelligence Platform API",
         "docs_url": "/docs",
         "health_endpoint": "/api/v1/health",
         "modules_loaded": {
-            "tenants": settings.enable_tenant_endpoints,
-            "users": settings.enable_user_endpoints,
+            "tenants": True if tenants_router is not None else False,
+            "users": True if users_router is not None else False,
         },
     }
 
