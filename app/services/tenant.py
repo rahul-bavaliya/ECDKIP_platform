@@ -36,7 +36,7 @@ class TenantService:
         db: AsyncSession, skip: int = 0, limit: int = 100
     ) -> list[Tenant]:
         result: Result[*tuple[Tenant, ...]] = await db.execute(
-            statement=select(Tenant).offset(skip).limit(limit)
+            statement=select(Tenant).offset(offset=skip).limit(limit)
         )
         return result.scalars().all()
 
