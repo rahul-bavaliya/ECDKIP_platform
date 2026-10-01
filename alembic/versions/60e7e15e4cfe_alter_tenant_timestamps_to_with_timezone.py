@@ -1,8 +1,8 @@
 """alter tenant timestamps to with timezone
 
-Revision ID: e2c568bc28d6
-Revises: cf3a0f3151fe
-Create Date: 2026-09-30 22:27:50.577961
+Revision ID: 60e7e15e4cfe
+Revises: 
+Create Date: 2026-09-30 22:49:03.313487
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'e2c568bc28d6'
-down_revision: Union[str, Sequence[str], None] = 'cf3a0f3151fe'
+revision: str = '60e7e15e4cfe'
+down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
